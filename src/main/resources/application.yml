@@ -24,8 +24,8 @@ spring:
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
-              - profile_image
-              - account_email
+#              - profile_image
+#              - account_email
             client-name: Kakao
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
           

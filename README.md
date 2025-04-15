@@ -1,6 +1,7 @@
-# Burty Server - 소셜 로그인 구현 프로젝트
+# Burty Server
 
-Spring Security와 Spring OAuth2를 활용하여 카카오, 구글, 네이버 소셜 로그인을 구현한 서버 프로젝트입니다.
+Spring Security와 Spring OAuth2를 활용하여 카카오, 구글, 네이버 소셜 로그인을 구현
++ 진행중..
 
 ## 기술 스택
 

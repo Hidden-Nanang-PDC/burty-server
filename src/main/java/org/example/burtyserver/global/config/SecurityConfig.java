@@ -51,29 +51,23 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 요청별 인가 설정
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        // 다른 모든 경로도 일단 허용 (테스트 용도)
-                        .anyRequest().permitAll())
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
-//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
+                        .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
                 // OAuth2 로그인 설정
-//                .oauth2Login(oauth2 -> oauth2
-//                        // 인증 엔드포인트 설정
-//                        .authorizationEndpoint(endpoint -> endpoint
-//                                .baseUri("/oauth2/authorize"))
-//                        // 리다이렉션 엔드포인트 설정
-//                        .redirectionEndpoint(endpoint -> endpoint
-//                                .baseUri("/login/oauth2/code/*"))
-//                        // 사용자 정보 엔드포인트 설정
-//                        .userInfoEndpoint(userInfo -> userInfo
-//                                .userService(oAuth2UserService))
-//                        // 인증 성공 처리 핸들러 설정
-//                        .successHandler(oAuth2AuthenticationSuccessHandler)
-//                )
-        ;
+                .oauth2Login(oauth2 -> oauth2
+                        // 인증 엔드포인트 설정
+                        .authorizationEndpoint(endpoint -> endpoint
+                                .baseUri("/oauth2/authorize"))
+                        // 리다이렉션 엔드포인트 설정
+                        .redirectionEndpoint(endpoint -> endpoint
+                                .baseUri("/login/oauth2/code/*"))
+                        // 사용자 정보 엔드포인트 설정
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService))
+                        // 인증 성공 처리 핸들러 설정
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                );
 
         // JWT 인증 필터 추가 - UsernamePasswordAuthenticationFilter 앞에 배치
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

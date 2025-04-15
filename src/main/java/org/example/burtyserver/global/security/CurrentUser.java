@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * Spring Security의 @AuthenticationPrincipal을 확장하여 사용
  *
  * 사용 예:
- * public ResponseEntity<?> getCurrentUser(@CurrentUser UserPrincipal userPrincipal) { ... }
+ * public ResponseEntity getCurrentUser(@CurrentUser UserPrincipal userPrincipal) { ... }
  */
 @Target({ElementType.PARAMETER, ElementType.TYPE})  // 파라미터와 타입에 사용 가능
 @Retention(RetentionPolicy.RUNTIME)                 // 런타임에 유지

@@ -69,7 +69,7 @@ public class TokenProvider {
         // JWT 서명 검증을 위한 키 생성
         Key key = Keys.hmacShaKeyFor(tokenSecret.getBytes());
 
-        Claims claims = Jwts.parserBuilder()
+        Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
@@ -90,7 +90,7 @@ public class TokenProvider {
             // JWT 서명 검증을 위한 키 생성
             Key key = Keys.hmacShaKeyFor(tokenSecret.getBytes());
             // 토큰 파싱 및 검증
-            Jwts.parserBuilder()
+            Jwts.parser()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(authToken);

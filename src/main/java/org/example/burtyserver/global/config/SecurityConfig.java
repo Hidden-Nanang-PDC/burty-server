@@ -1,9 +1,10 @@
 package org.example.burtyserver.global.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.global.security.jwt.JwtAuthenticationFilter;
 import org.example.burtyserver.global.security.oauth2.CustomUserDetailsService;
+import org.example.burtyserver.global.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import org.example.burtyserver.global.security.oauth2.OAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,9 +30,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    // 필요한 서비스 및 필터 주입
-//    private final OAuth2UserService oAuth2UserService;                             // OAuth2 사용자 정보 처리 서비스
-//    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;  // OAuth2 인증 성공 핸들러
+    // 필요한 서비스 및 필터 주입
+    private final OAuth2UserService oAuth2UserService;                             // OAuth2 사용자 정보 처리 서비스
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;  // OAuth2 인증 성공 핸들러
     private final CustomUserDetailsService customUserDetailsService;               // 사용자 상세 정보 서비스
     private final JwtAuthenticationFilter jwtAuthenticationFilter;                 // JWT 인증 필터
 

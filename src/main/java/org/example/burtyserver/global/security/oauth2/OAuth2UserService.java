@@ -1,6 +1,7 @@
 package org.example.burtyserver.global.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.burtyserver.domain.user.entity.User;
 import org.example.burtyserver.domain.user.entity.UserAuthority;
 import org.example.burtyserver.domain.user.repository.UserAuthorityRepository;
@@ -19,6 +20,7 @@ import org.springframework.util.StringUtils;
 import javax.naming.AuthenticationException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2UserService extends DefaultOAuth2UserService {
@@ -27,26 +29,40 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     private final UserAuthorityRepository userAuthorityRepository;
 
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        log.debug("OAuth2 사용자 정보 요청 시작: {}", userRequest.getClientRegistration().getRegistrationId());
+
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         try{
+            log.debug("OAuth2 사용자 속성: {}", oAuth2User.getAttributes());
             return processOAuth2User(userRequest, oAuth2User);
         } catch(Exception ex) {
+            log.error("OAuth2 사용자 처리 중 오류: ", ex);
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex.getCause());
         }
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User){
         String registrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
+        log.debug("소셜 로그인 제공자: {}", registrationId);
         User.AuthProvider provider = getProvider(registrationId);
+
+        // attributes가 null이 아닌지 확인
+        if (oAuth2User.getAttributes() == null) {
+            log.error("OAuth2 사용자 속성이 null입니다.");
+            throw new OAuth2AuthenticationException("OAuth2 사용자 속성이 존재하지 않습니다.");
+        }
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(
                 registrationId,
                 oAuth2User.getAttributes()
         );
 
-        if (!StringUtils.hasText(oAuth2UserInfo.getEmail())) {
-            throw new OAuth2AuthenticationException("Email not found from OAuth2 provider");
+        // 이메일 정보 확인 및 생성
+        String email = oAuth2UserInfo.getEmail();
+        if (email == null || email.isEmpty()) {
+            email = provider.toString().toLowerCase() + "_" + oAuth2UserInfo.getId() + "@kakao.user.com";
+            log.debug("이메일 정보가 없어 생성된 이메일: {}", email);
         }
 
         Optional<User> userOptional = userRepository.findByProviderAndProviderId(provider, oAuth2UserInfo.getId());
@@ -62,15 +78,16 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             user = userRepository.save(user);
         } else {
             // 새 사용자 생성
-            user = createUser(oAuth2UserInfo, provider);
+            user = createUser(oAuth2UserInfo, provider, email);
         }
 
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
-    private User createUser(OAuth2UserInfo oAuth2UserInfo, User.AuthProvider provider) {
+    private User createUser(OAuth2UserInfo oAuth2UserInfo, User.AuthProvider provider, String email) {
+
         User user = User.builder()
-                .email(oAuth2UserInfo.getEmail())
+                .email(email)
                 .name(oAuth2UserInfo.getName())
                 .profileImageUrl(oAuth2UserInfo.getImageUrl())
                 .provider(provider)

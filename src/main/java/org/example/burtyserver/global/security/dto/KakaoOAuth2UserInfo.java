@@ -14,8 +14,12 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getId() {
+        if (attributes.get("id") == null) {
+            return "kakao_unknown";  // 기본값 제공
+        }
         return attributes.get("id").toString();
     }
+
 
     @Override
     public String getName() {
@@ -28,11 +32,14 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     @Override
     public String getEmail() {
-        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
-        if (kakaoAccount == null) {
-            return null;
+        if (attributes.containsKey("kakao_account")) {
+            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            if (kakaoAccount != null && kakaoAccount.containsKey("email")) {
+                return (String) kakaoAccount.get("email");
+            }
         }
-        return (String) kakaoAccount.get("email");
+        // 이메일이 없는 경우 null 반환 (상위 메소드에서 처리)
+        return null;
     }
 
     @Override

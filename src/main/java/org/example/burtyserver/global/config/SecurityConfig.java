@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 // JWT 사용으로 세션 불필요
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 // 요청별 인가 설정
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()

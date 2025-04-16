@@ -23,7 +23,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final TokenProvider tokenProvider;
 
-    // 리다이렉트 URL (application.yml에서 설정, 기본값은 http://localhost:3000/oauth2/redirect)
     @Value("${app.oauth2.authorized-redirect-uri}")
     private String redirectUri;
 
@@ -43,7 +42,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
-        // 결정된 URL로 리다이렉트
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 

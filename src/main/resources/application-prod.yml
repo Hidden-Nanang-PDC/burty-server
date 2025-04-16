@@ -33,11 +33,9 @@ spring:
           kakao:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
-
-          # 구글 운영 설정 (필요시 주석 해제)
-          # google:
-          #   client-id: ${GOOGLE_CLIENT_ID}
-          #   client-secret: ${GOOGLE_CLIENT_SECRET}
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
 
           # 네이버 운영 설정 (필요시 주석 해제)
           # naver:

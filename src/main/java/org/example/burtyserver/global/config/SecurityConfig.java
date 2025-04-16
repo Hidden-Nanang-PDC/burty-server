@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // CORS 설정 비활성화 (배포 시 다시 점검)
                 .cors(AbstractHttpConfigurer::disable)
-                // JWT 사용으로 세션 불필요
+                // JWT 사용으로 세션 불필요 (배포 시 다시 점검)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 // 요청별 인가 설정

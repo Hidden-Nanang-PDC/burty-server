@@ -28,12 +28,13 @@ spring:
 #              - account_email
             client-name: Kakao
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-          
-          # Google 공통 설정
-          # google:
-          #   scope:
-          #     - profile
-          #     - email
+          google:
+            client-name: Google
+            authorization-grant-type: authorization_code
+            scope:
+              - profile
+              - email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
           
           # Naver 공통 설정
           # naver:

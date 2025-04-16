@@ -29,9 +29,7 @@ public class User {
     private Long id;
     @Column(nullable = false, unique = true)
     private String email;
-
     private String password;
-
     private String name;
     private String profileImageUrl;  // 프로필 이미지 URL
 
@@ -40,7 +38,6 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;  // 인증 제공자 (KAKAO, GOOGLE, NAVER, LOCAL)
-
     private String providerId;  // 인증 제공자에서의 사용자 ID
 
     @CreationTimestamp

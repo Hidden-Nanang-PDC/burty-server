@@ -1,7 +1,7 @@
-package org.example.burtyserver.domain.user.repository;
+package org.example.burtyserver.domain.user.model.repository;
 
-import org.example.burtyserver.domain.user.entity.User;
-import org.example.burtyserver.domain.user.entity.UserAuthority;
+import org.example.burtyserver.domain.user.model.entity.User;
+import org.example.burtyserver.domain.user.model.entity.UserAuthority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

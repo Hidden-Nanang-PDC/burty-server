@@ -1,8 +1,8 @@
 package org.example.burtyserver.global.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
-import org.example.burtyserver.domain.user.entity.User;
-import org.example.burtyserver.domain.user.repository.UserRepository;
+import org.example.burtyserver.domain.user.model.entity.User;
+import org.example.burtyserver.domain.user.model.repository.UserRepository;
 import org.example.burtyserver.global.security.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

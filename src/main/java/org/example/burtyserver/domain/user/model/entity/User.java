@@ -1,4 +1,4 @@
-package org.example.burtyserver.domain.user.entity;
+package org.example.burtyserver.domain.user.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -84,6 +84,16 @@ public class User {
     public User update(String name, String profileImageUrl) {
         this.name = name;
         this.profileImageUrl = profileImageUrl;
+        return this;
+    }
+
+    /**
+     * 사용자 추가 프로필 정보 업데이트
+     */
+    public User updateProfile(String nickname, String region, Integer age) {
+        this.nickname = nickname;
+        this.region = region;
+        this.age = age;
         return this;
     }
 

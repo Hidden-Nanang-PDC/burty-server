@@ -2,10 +2,10 @@ package org.example.burtyserver.global.security.oauth2;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.burtyserver.domain.user.entity.User;
-import org.example.burtyserver.domain.user.entity.UserAuthority;
-import org.example.burtyserver.domain.user.repository.UserAuthorityRepository;
-import org.example.burtyserver.domain.user.repository.UserRepository;
+import org.example.burtyserver.domain.user.model.entity.User;
+import org.example.burtyserver.domain.user.model.entity.UserAuthority;
+import org.example.burtyserver.domain.user.model.repository.UserAuthorityRepository;
+import org.example.burtyserver.domain.user.model.repository.UserRepository;
 import org.example.burtyserver.global.security.UserPrincipal;
 import org.example.burtyserver.global.security.dto.OAuth2UserInfo;
 import org.example.burtyserver.global.security.dto.OAuth2UserInfoFactory;
@@ -15,9 +15,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import javax.naming.AuthenticationException;
 import java.util.Optional;
 
 @Slf4j

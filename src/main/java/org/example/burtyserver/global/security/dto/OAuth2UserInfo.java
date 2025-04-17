@@ -21,4 +21,9 @@ public abstract class OAuth2UserInfo {
     public abstract String getName();
     public abstract String getEmail();
     public abstract String getImageUrl();
+
+    // 소셜 로그인에서 제공하지 않는 정보는 null을 반환
+    public String getNickname() {return null;}
+    public String getReion() {return null;}
+    public Integer getAge() {return null;}
 }

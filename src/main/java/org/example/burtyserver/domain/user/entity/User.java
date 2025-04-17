@@ -33,6 +33,15 @@ public class User {
     private String name;
     private String profileImageUrl;  // 프로필 이미지 URL
 
+    @Column(length = 50)
+    private String nickname;  // 사용자 닉네임
+
+    @Column(length = 100)
+    private String region;    // 사용자 지역
+
+    @Column
+    private Integer age;      // 사용자 나이
+
     @Enumerated(EnumType.STRING)
     private Role role;  // 사용자 역할 (ROLE_USER, ROLE_ADMIN)
 

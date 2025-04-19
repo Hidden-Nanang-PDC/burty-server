@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.auth.dto.AuthResponse;
@@ -35,7 +36,7 @@ public class AuthController {
      * @param userPrincipal 현재 인증된 사용자 정보 (@CurrentUser 어노테이션으로 주입)
      * @return 사용자 정보 응답 DTO
      */
-    @Operation(summary = "현재 사용자 정보 조회", description = "토큰으로 인증된 현재 사용자의 정보를 반환합니다.")
+    @Operation(summary = "현재 사용자 정보 조회", description = "토큰으로 인증된 현재 사용자의 정보를 반환합니다.", security = @SecurityRequirement(name="bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = AuthResponse.class))),
             @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자", content = @Content)

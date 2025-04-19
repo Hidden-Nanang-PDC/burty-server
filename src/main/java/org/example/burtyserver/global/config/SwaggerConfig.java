@@ -1,9 +1,10 @@
 package org.example.burtyserver.global.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Operation;
-import io.swagger.v3.oas.models.PathItem;
-import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.models.*;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -14,6 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Configuration
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT",
+        in = SecuritySchemeIn.HEADER
+)
 public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
@@ -30,7 +38,7 @@ public class SwaggerConfig {
                                 .in("path")
                                 .required(true)
                                 .schema(new Schema<String>().type("string").example("kakao"))
-                                .description("소셜 로그인 제공자(kakao, google, naver)"))
+                                .description("소셜 로그인 제공자(kakao, google)"))
                         .summary("소셜 로그인 요청")
                         .description("소셜 로그인 인증 페이지로 리다이렉트합니다.")
                         .tags(List.of("소셜 로그인"))));
@@ -41,7 +49,7 @@ public class SwaggerConfig {
                                 .in("path")
                                 .required(true)
                                 .schema(new Schema<String>().type("string").example("kakao"))
-                                .description("소셜 로그인 제공자(kakao, google, naver)"))
+                                .description("소셜 로그인 제공자(kakao, google)"))
                         .summary("소셜 로그인 콜백")
                         .description("소셜 로그인 인증 후 콜백 처리를 합니다.")
                         .tags(List.of("소셜 로그인"))));

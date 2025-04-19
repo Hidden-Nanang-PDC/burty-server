@@ -2,7 +2,7 @@ package org.example.burtyserver.global.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.example.burtyserver.domain.user.entity.User;
+import org.example.burtyserver.domain.user.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

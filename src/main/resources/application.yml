@@ -63,6 +63,6 @@ spring:
 # JWT 공통 설정
 app:
   auth:
-    token-expiration-msec: 864000000  # 10일
+    token-expiration-msec: 86400000  # 1일
   oauth2:
     authorized-redirect-uri: /oauth2/redirect  # 기본 경로 (환경별로 도메인 추가)

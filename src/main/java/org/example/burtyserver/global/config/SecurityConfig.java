@@ -54,6 +54,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/oauth2/**", "/login/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // Swagger 관련 접근 허용
+                        .requestMatchers("/swagger-ui/**",
+                                "/swagger-resources/**",
+                                "/v2/api-docs",
+                                "/v3/api-docs",
+                                "/webjars/**").permitAll()
                         .anyRequest().authenticated())
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2

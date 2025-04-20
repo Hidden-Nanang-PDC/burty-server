@@ -94,7 +94,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 // 닉네임, 지역, 나이는 초기값 null로 설정
                 .nickname(null)
                 .region(null)
-                .age(null)
+                .birthDate(null)
                 .build();
 
         User savedUser = userRepository.save(user);

@@ -3,6 +3,9 @@
 Spring Security와 Spring OAuth2를 활용하여 카카오, 구글, 네이버 소셜 로그인을 구현
 + 진행중..
 
+## DataBase
+[ERD 모델](https://www.erdcloud.com/d/WhRKNkXzxhCqTsNgD)
+
 ## 기술 스택
 
 - Java 17

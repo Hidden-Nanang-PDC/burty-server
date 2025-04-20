@@ -7,16 +7,23 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.auth.dto.AuthResponse;
+import org.example.burtyserver.domain.auth.service.AuthService;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.example.burtyserver.domain.user.model.repository.UserRepository;
 import org.example.burtyserver.global.security.CurrentUser;
 import org.example.burtyserver.global.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 인증 관련 API 컨트롤러
@@ -29,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserRepository userRepository;  // 사용자 정보 조회를 위한 리포지토리
+    private final AuthService authService;
 
     /**
      * 현재 인증된 사용자 정보 조회 API
@@ -58,5 +66,23 @@ public class AuthController {
                         .provider(user.getProvider().name())  // 인증 제공자 (KAKAO, GOOGLE, NAVER)
                         .build()
         );
+    }
+
+    @Operation(summary = "로그아웃", description = "사용자 로그아웃 처리(Refresh Token 폐기)", security = @SecurityRequirement(name="bearerAuth"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+            @ApiResponse(responseCode = "401", description = "인증되지 않은 사용자", content = @Content)
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@CurrentUser UserPrincipal userPrincipal,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
+        authService.logout(userPrincipal, request, response);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", true);
+        result.put("message", "로그아웃 되었습니다.");
+
+        return ResponseEntity.ok(result);
     }
 }

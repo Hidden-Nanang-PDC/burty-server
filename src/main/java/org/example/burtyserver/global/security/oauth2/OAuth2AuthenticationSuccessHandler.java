@@ -1,6 +1,7 @@
 package org.example.burtyserver.global.security.oauth2;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final TokenProvider tokenProvider;
 
-    @Value("${app.oauth2.authorized-redirect-uri}")
+    @Value("${app.oauth2.authorized-redirect-uri")
     private String redirectUri;
+
+    @Value("${app.auth.refresh-token-expiration-msec}")
+    private long refreshTokenExpirationMsec;
 
     /**
      * 인증 성공 시 호출되는 메서드
@@ -33,8 +37,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
-        // 리다이렉트할 URL 결정
-        String targetUrl = determineTargetUrl(request, response, authentication);
+        // Access Token 생성
+        String token = tokenProvider.createToken(authentication);
+
+        // Refresh Token 생성
+        String refreshToken = tokenProvider.createRefreshToken(authentication);
+        addRefreshTokenCookie(response, refreshToken);
+
+        // Access Token을 포함해 리다이렉트
+        String targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
+                .queryParam("token", token)
+                .build().toUriString();
 
         // 이미 응답이 커밋된 경우, 로그만 남기고 종료
         if (response.isCommitted()) {
@@ -45,11 +58,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String token = tokenProvider.createToken(authentication);
+    private void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        int maxAge = (int) (refreshTokenExpirationMsec/1000);
 
-        return UriComponentsBuilder.fromUriString(redirectUri)
-                .queryParam("token", token)
-                .build().toUriString();
+        Cookie cookie = new Cookie("refresh_token", refreshToken);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setMaxAge(maxAge);
+
+        response.addCookie(cookie);
     }
+
 }

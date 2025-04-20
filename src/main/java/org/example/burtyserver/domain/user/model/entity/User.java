@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +41,7 @@ public class User {
     private String region;    // 사용자 지역
 
     @Column
-    private Integer age;      // 사용자 나이
+    private LocalDate birthDate;      // 사용자 생년월일
 
     @Enumerated(EnumType.STRING)
     private Role role;  // 사용자 역할 (ROLE_USER, ROLE_ADMIN)
@@ -90,10 +91,10 @@ public class User {
     /**
      * 사용자 추가 프로필 정보 업데이트
      */
-    public User updateProfile(String nickname, String region, Integer age) {
+    public User updateProfile(String nickname, String region, LocalDate birthDate) {
         this.nickname = nickname;
         this.region = region;
-        this.age = age;
+        this.birthDate = birthDate;
         return this;
     }
 

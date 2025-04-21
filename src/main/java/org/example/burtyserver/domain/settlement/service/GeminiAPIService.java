@@ -74,7 +74,7 @@ public class GeminiAPIService {
                         "{\n" +
                         "  \"recommendedArea\": \"추천 지역명(시/군/구까지 구체적으로)\",\n" +
                         "  \"recommendationReason\": \"추천 사유(직무 연관성, 생활비, 정책 등 구체적 이유)\",\n" +
-                        "  \"savingsPotential\": \"해당 지역 예상 저축 가능성(직무별 평균 소득 - 고정비 - 지역 평균 월세)\",\n" +
+                        "  \"savingPotential\": \"해당 지역 예상 저축 가능성(직무별 평균 소득 - 고정비 - 지역 평균 월세)\",\n" +
                         "  \"policies\": [\n" +
                         "    {\"name\": \"정책명1\", \"description\": \"정책 설명1\", \"url\": \"정책 URL1(선택)\"},\n" +
                         "    {\"name\": \"정책명2\", \"description\": \"정책 설명2\", \"url\": \"정책 URL2(선택)\"}\n" +

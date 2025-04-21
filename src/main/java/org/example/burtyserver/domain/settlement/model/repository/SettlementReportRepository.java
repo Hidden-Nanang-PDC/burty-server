@@ -21,5 +21,11 @@ public interface SettlementReportRepository extends JpaRepository<SettlementRepo
      */
     List<SettlementReport> findByUserOrderByCreatedAtDesc(User user);
 
+    /**
+     * 사용자와 리포트 ID로 특정 리포트 조회
+     * @param user 사용자
+     * @param id 리포트 ID
+     * @return 정착 리포트
+     */
     Optional<SettlementReport> findByUserAndId(User user, Long id);
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationRequest;
+import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationResponse;
 import org.example.burtyserver.domain.settlement.service.SettlementService;
 import org.example.burtyserver.global.security.CurrentUser;
 import org.example.burtyserver.global.security.UserPrincipal;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
+/**
+ * 정착지 추천 관련 API 컨트롤러
+ */
 @RestController
 @RequestMapping("/api/settlements")
 @RequiredArgsConstructor
@@ -25,6 +29,14 @@ import java.io.IOException;
 public class SettlementController {
     private final SettlementService settlementService;
 
+    /**
+     * 정착지 추천 요청 API
+     *
+     * @param userPrincipal 인증된 사용자 정보
+     * @param request 정착지 추천 요청 DTO
+     * @return 정착지 추천 결과
+     * @throws IOException API 호출 중 오류 발생 시
+     */
     @PostMapping("/recommend")
     @Operation(
             summary = "정착지 추천 요청",
@@ -32,11 +44,11 @@ public class SettlementController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(responseCode = "200", description = "정착지 추천 성공")
-    public ResponseEntity<String> recommendSettlement(
+    public ResponseEntity<SettlementRecommendationResponse> recommendSettlement(
             @CurrentUser UserPrincipal userPrincipal,
             @RequestBody SettlementRecommendationRequest request
             ) throws IOException{
-        String response = settlementService.recommendSettlement(userPrincipal.getId(), request);
+        SettlementRecommendationResponse response = settlementService.recommendSettlement(userPrincipal.getId(), request);
 
         return ResponseEntity.ok(response);
     }

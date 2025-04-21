@@ -24,7 +24,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final TokenProvider tokenProvider;
 
-    @Value("${app.oauth2.authorized-redirect-uri")
+    @Value("${app.oauth2.authorized-redirect-uri}")
     private String redirectUri;
 
     @Value("${app.auth.refresh-token-expiration-msec}")

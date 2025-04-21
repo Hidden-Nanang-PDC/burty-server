@@ -7,6 +7,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.example.burtyserver.domain.auth.model.entity.RefreshToken;
 import org.example.burtyserver.domain.auth.model.repository.RefreshTokenRepository;
@@ -141,6 +142,7 @@ public class TokenProvider {
      * @param authentication Spring Security 인증 객체
      * @return 생성된 Refresh Token 문자열
      */
+    @Transactional
     public String createRefreshToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         User user = userRepository.findById(userPrincipal.getId())
@@ -148,7 +150,10 @@ public class TokenProvider {
 
         // 기존 Refresh Token이 있으면 폐기
         Optional<RefreshToken> existingToken = refreshTokenRepository.findByUserAndRevokedFalse(user);
-        existingToken.ifPresent(RefreshToken::revoke);
+        existingToken.ifPresent(token -> {
+            token.revoke();
+            refreshTokenRepository.save(token);
+        });
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + refreshTokenExpirationMsec);

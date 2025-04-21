@@ -3,6 +3,9 @@
 - Spring Security와 Spring OAuth2를 활용하여 카카오, 구글, 네이버 소셜 로그인을 구현
 - Google Gemini API를 활용한 청년 정착지 추천 기능 제공
 
+## Swagger
+[버티 API 문서](https://burty-server.onrender.com/swagger-ui/index.html)
+
 ## DataBase
 [ERD 모델](https://www.erdcloud.com/d/WhRKNkXzxhCqTsNgD)
 

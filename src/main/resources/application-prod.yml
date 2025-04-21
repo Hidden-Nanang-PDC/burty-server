@@ -68,3 +68,6 @@ app:
     token-secret: ${JWT_SECRET}
   oauth2:
     authorized-redirect-uri: https://${FRONTEND_DOMAIN}/oauth2/redirect
+  gemini:
+    api-key: ${GEMINI_API_KEY}
+    model: gemini-2.0-flash

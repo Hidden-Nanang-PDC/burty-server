@@ -16,11 +16,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User updateUserProfile(Long userId, String nickname, String region, LocalDate birthDate){
+    public User updateUserProfile(Long userId, String nickname, String region, LocalDate birthDate, String job){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID: " + userId));
 
-        user.updateProfile(nickname, region, birthDate);
+        user.updateProfile(nickname, region, birthDate, job);
         return userRepository.save(user);
     }
 }

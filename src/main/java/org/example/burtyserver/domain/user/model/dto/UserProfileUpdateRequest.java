@@ -11,4 +11,5 @@ public class UserProfileUpdateRequest {
     private String nickname;
     private String region;
     private LocalDate birthDate;
+    private String job;
 }

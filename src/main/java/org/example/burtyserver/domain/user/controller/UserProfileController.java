@@ -39,7 +39,8 @@ public class UserProfileController {
                 userPrincipal.getId(),
                 request.getNickname(),
                 request.getRegion(),
-                request.getBirthDate()
+                request.getBirthDate(),
+                request.getJob()
         );
 
         Map<String, Object> response = new HashMap<>();

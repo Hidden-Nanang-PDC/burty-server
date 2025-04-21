@@ -43,6 +43,9 @@ public class User {
     @Column
     private LocalDate birthDate;      // 사용자 생년월일
 
+    @Column(length = 50)
+    private String job;  // 사용자 닉네임
+
     @Enumerated(EnumType.STRING)
     private Role role;  // 사용자 역할 (ROLE_USER, ROLE_ADMIN)
 
@@ -91,10 +94,11 @@ public class User {
     /**
      * 사용자 추가 프로필 정보 업데이트
      */
-    public User updateProfile(String nickname, String region, LocalDate birthDate) {
+    public User updateProfile(String nickname, String region, LocalDate birthDate, String job) {
         this.nickname = nickname;
         this.region = region;
         this.birthDate = birthDate;
+        this.job = job;
         return this;
     }
 

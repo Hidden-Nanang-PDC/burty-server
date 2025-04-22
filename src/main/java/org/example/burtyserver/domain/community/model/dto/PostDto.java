@@ -64,49 +64,49 @@ public class PostDto {
                     .createdAt(post.getCreatedAt())
                     .build();
         }
+    }
 
-        /**
-         * 게시글 상세 응답 DTO
-         */
-        @Getter
-        @NoArgsConstructor
-        @AllArgsConstructor
-        @Builder
-        public static class DetailResponse{
-            private Long id;
-            private String title;
-            private String content;
-            private Long authorId;
-            private String authorName;
-            private String authorImageUrl;
-            private List<CategoryDto.Response> categories;
-            private LocalDateTime createdAt;
-            private LocalDateTime updatedAt;
-            private List<CommentDto.Response> comments;
-            private boolean isAuthor;
+    /**
+     * 게시글 상세 응답 DTO
+     */
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class DetailResponse{
+        private Long id;
+        private String title;
+        private String content;
+        private Long authorId;
+        private String authorName;
+        private String authorImageUrl;
+        private List<CategoryDto.Response> categories;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+        private List<CommentDto.Response> comments;
+        private boolean isAuthor;
 
-            public static DetailResponse from(Post post, Long currentUserId) {
-                List<CommentDto.Response> commentDtos = post.getComments().stream()
-                        .map(comment -> CommentDto.Response.from(comment, currentUserId))
-                        .collect(Collectors.toList());
-                List<CategoryDto.Response> categoryDtos = post.getCategories().stream()
-                        .map(CategoryDto.Response::from)
-                        .collect(Collectors.toList());
+        public static DetailResponse from(Post post, Long currentUserId) {
+            List<CommentDto.Response> commentDtos = post.getComments().stream()
+                    .map(comment -> CommentDto.Response.from(comment, currentUserId))
+                    .collect(Collectors.toList());
+            List<CategoryDto.Response> categoryDtos = post.getCategories().stream()
+                    .map(CategoryDto.Response::from)
+                    .collect(Collectors.toList());
 
-                return DetailResponse.builder()
-                        .id(post.getId())
-                        .title(post.getTitle())
-                        .content(post.getContent())
-                        .authorId(post.getAuthor().getId())
-                        .authorName(post.getAuthor().getName())
-                        .authorImageUrl(post.getAuthor().getProfileImageUrl())
-                        .categories(categoryDtos)
-                        .createdAt(post.getCreatedAt())
-                        .updatedAt(post.getUpdatedAt())
-                        .comments(commentDtos)
-                        .isAuthor(post.getAuthor().getId().equals(currentUserId))
-                        .build();
-            }
+            return DetailResponse.builder()
+                    .id(post.getId())
+                    .title(post.getTitle())
+                    .content(post.getContent())
+                    .authorId(post.getAuthor().getId())
+                    .authorName(post.getAuthor().getName())
+                    .authorImageUrl(post.getAuthor().getProfileImageUrl())
+                    .categories(categoryDtos)
+                    .createdAt(post.getCreatedAt())
+                    .updatedAt(post.getUpdatedAt())
+                    .comments(commentDtos)
+                    .isAuthor(post.getAuthor().getId().equals(currentUserId))
+                    .build();
         }
     }
 

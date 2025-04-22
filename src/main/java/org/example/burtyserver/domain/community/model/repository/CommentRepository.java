@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CommentReposiroty extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     /**
      * 게시글별 댓글 목록 조회 (생성일시 순)

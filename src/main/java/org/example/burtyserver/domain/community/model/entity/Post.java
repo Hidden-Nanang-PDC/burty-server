@@ -1,10 +1,7 @@
 package org.example.burtyserver.domain.community.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.checkerframework.checker.units.qual.C;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,6 +38,7 @@ public class Post {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+    @Setter
     @ManyToMany
     @JoinTable(
             name = "post_categories",

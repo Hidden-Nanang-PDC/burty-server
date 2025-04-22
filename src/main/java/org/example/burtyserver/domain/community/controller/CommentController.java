@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.community.model.dto.CommentDto;
+import org.example.burtyserver.domain.community.model.dto.PostDto;
 import org.example.burtyserver.domain.community.model.entity.Comment;
 import org.example.burtyserver.domain.community.service.CommentService;
 import org.example.burtyserver.global.security.CurrentUser;
@@ -117,18 +118,18 @@ public class CommentController {
     }
 
     /**
-     * 내가 작성한 댓글 목록 조회 API
+     * 내가 댓글을 작성한 게시글 목록 조회 API
      */
-    @GetMapping("/my")
+    @GetMapping("/commented-by-me")
     @Operation(
-            summary = "내가 작성한 댓글 목록 조회",
-            description = "현재 로그인한 사용자가 작성한 댓글 목록을 조회합니다",
+            summary = "내가 댓글을 작성한 게시글 목록 조회",
+            description = "현재 로그인한 사용자가 댓글을 작성한 게시글 목록을 조회합니다",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<List<CommentDto.Response>> getMyComments(
+    public ResponseEntity<List<PostDto.ListResponse>> getPostsCommentedByMe(
             @CurrentUser UserPrincipal userPrincipal
     ) {
-        List<CommentDto.Response> comments = commentService.getCommentsByUser(userPrincipal.getId());
-        return ResponseEntity.ok(comments);
+        List<PostDto.ListResponse> posts = commentService.getPostsCommentedByUser(userPrincipal.getId());
+        return ResponseEntity.ok(posts);
     }
 }

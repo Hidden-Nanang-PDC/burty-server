@@ -4,6 +4,8 @@ import org.example.burtyserver.domain.community.model.entity.Comment;
 import org.example.burtyserver.domain.community.model.entity.Post;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,8 +24,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
      */
     List<Comment> findByAuthorOrderByCreatedAtDesc(User author);
 
-    /**
-     * 특정 사용자와 댓글 ID로 댓글 조회
-     */
-    Optional<Comment> findByIdAndAuthor(Long id, User author);
+    @Query("SELECT DISTINCT c.post FROM Comment c WHERE c.author.id = :userId")
+    List<Post> findPostsByCommentAuthor(@Param("userId") Long userId);
 }

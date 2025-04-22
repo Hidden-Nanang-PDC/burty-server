@@ -59,7 +59,7 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
 
-    public void update(String title, String content, Category category){
+    public void update(String title, String content, Set<Category> categories){
         this.title = title;
         this.content = content;
         this.categories = categories;

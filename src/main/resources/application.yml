@@ -3,9 +3,9 @@ spring:
   application:
     name: burty-server
   
-#  # 프로필 활성화 설정 (기본값: dev)
-#  profiles:
-#    active: dev
+  # 프로필 활성화 설정 (기본값: dev)
+  profiles:
+    active: dev
   
   # JPA 공통 설정
   jpa:

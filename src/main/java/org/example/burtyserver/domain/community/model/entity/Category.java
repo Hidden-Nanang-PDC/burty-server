@@ -28,7 +28,7 @@ public class Category {
     @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @ManyToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "categories")
     private Set<Post> posts = new HashSet<>();
 
     public void update(String name){

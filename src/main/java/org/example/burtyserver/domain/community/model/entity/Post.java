@@ -56,6 +56,9 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PostLike> likes = new HashSet<>();
+
 
     public void update(String title, String content, Set<Category> categories){
         this.title = title;
@@ -74,5 +77,27 @@ public class Post {
 
     public void removeCategory(Category category){
         this.categories.remove(category);
+    }
+
+    public int getLikeCount() {
+        return likes.size();
+    }
+
+    public boolean isLikedByUser(User user){
+        return likes.stream()
+                .anyMatch(like -> like.getUser().getId().equals(user.getId()));
+    }
+
+    public PostLike addLike(User user){
+        PostLike postLike = PostLike.builder()
+                .post(this)
+                .user(user)
+                .build();
+        this.likes.add(postLike);
+        return postLike;
+    }
+
+    public void removeLike(User user) {
+        this.likes.removeIf(like -> like.getUser().getId().equals(user.getId()));
     }
 }

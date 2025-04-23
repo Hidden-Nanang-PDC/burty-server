@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.burtyserver.domain.community.model.entity.Comment;
+import org.example.burtyserver.domain.user.model.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -40,7 +41,7 @@ public class CommentDto {
         private LocalDateTime updatedAt;
         private boolean isAuthor;
 
-        public static Response from(Comment comment, Long currentUserId) {
+        public static Response from(Comment comment, User currentUser) {
             return Response.builder()
                     .id(comment.getId())
                     .content(comment.getContent())
@@ -49,7 +50,7 @@ public class CommentDto {
                     .authorImageUrl(comment.getAuthor().getProfileImageUrl())
                     .createdAt(comment.getCreatedAt())
                     .updatedAt(comment.getUpdatedAt())
-                    .isAuthor(comment.getAuthor().getId().equals(currentUserId))
+                    .isAuthor(currentUser != null && comment.getAuthor().getId().equals(currentUser.getId()))
                     .build();
         }
     }

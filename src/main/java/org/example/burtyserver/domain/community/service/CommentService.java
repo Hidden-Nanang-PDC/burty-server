@@ -89,8 +89,10 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + postId));
 
         List<Comment> comments = commentRepository.findByPostOrderByCreatedAtAsc(post);
+        User currentUser;
+        currentUser = userRepository.findById(userId).orElse(null);
         return comments.stream()
-                .map(comment -> CommentDto.Response.from(comment, userId))
+                .map(comment -> CommentDto.Response.from(comment, currentUser))
                 .collect(Collectors.toList());
     }
 
@@ -102,8 +104,10 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID: " + userId));
 
         List<Comment> comments = commentRepository.findByAuthorOrderByCreatedAtDesc(user);
+        User currentUser;
+        currentUser = userRepository.findById(userId).orElse(null);
         return comments.stream()
-                .map(comment -> CommentDto.Response.from(comment, userId))
+                .map(comment -> CommentDto.Response.from(comment, currentUser))
                 .collect(Collectors.toList());
     }
 
@@ -118,7 +122,7 @@ public class CommentService {
 
         return posts.stream()
                 .distinct()
-                .map(PostDto.ListResponse::from)
+                .map(post -> PostDto.ListResponse.from(post, user))
                 .collect(Collectors.toList());
     }
 

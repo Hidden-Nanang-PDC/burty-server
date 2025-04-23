@@ -110,39 +110,57 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + postId));
 
         postRepository.save(post);
+        User currentUser;
+        currentUser = userRepository.findById(userId).orElse(null);
 
-        return PostDto.DetailResponse.from(post, userId);
+        return PostDto.DetailResponse.from(post, currentUser);
     }
 
     /**
      * 게시글 목록 조회
      */
-    public Page<PostDto.ListResponse> getPosts(Pageable pageable) {
+    public Page<PostDto.ListResponse> getPosts(Pageable pageable, Long userId) {
         Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
-        return posts.map(PostDto.ListResponse::from);
+        User currentUser;
+        currentUser = userRepository.findById(userId).orElse(null);
+        return posts.map(post -> PostDto.ListResponse.from(post, currentUser));
     }
 
     /**
      * 카테고리별 게시글 목록 조회
      */
-    public Page<PostDto.ListResponse> getPostsByCategory(Long categoryId, Pageable pageable) {
+    public Page<PostDto.ListResponse> getPostsByCategory(Long categoryId, Long currentUserId, Pageable pageable) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID: " + categoryId));
 
+        User currentUser;
+        currentUser = userRepository.findById(currentUserId).orElse(null);
         Page<Post> posts = postRepository.findByCategoryIdOrderByCreatedAtDesc(category.getId(), pageable);
-        return posts.map(PostDto.ListResponse::from);
+        return posts.map(post -> PostDto.ListResponse.from(post, currentUser));
     }
 
     /**
      * 사용자별 게시글 목록 조회
      */
-    public List<PostDto.ListResponse> getPostsByUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID: " + userId));
+    public List<PostDto.ListResponse> getPostsByUser(Long authorId, Long currentUserId) {
+        User author = userRepository.findById(authorId)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID: " + authorId));
+        // 현재 사용자 조회
+        User currentUser;
+        if (currentUserId != null) {
+            // 조회하는 사용자와 현재 사용자가 같은 경우 재사용
+            if (authorId.equals(currentUserId)) {
+                currentUser = author;
+            } else {
+                currentUser = userRepository.findById(currentUserId).orElse(null);
+            }
+        } else {
+            currentUser = null;
+        }
 
-        List<Post> posts = postRepository.findByAuthorOrderByCreatedAtDesc(user);
+        List<Post> posts = postRepository.findByAuthorOrderByCreatedAtDesc(author);
         return posts.stream()
-                .map(PostDto.ListResponse::from)
+                .map(post -> PostDto.ListResponse.from(post, currentUser))
                 .collect(Collectors.toList());
     }
 }

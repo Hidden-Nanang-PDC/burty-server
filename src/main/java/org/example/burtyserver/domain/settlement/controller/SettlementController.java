@@ -9,15 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationRequest;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationResponse;
 import org.example.burtyserver.domain.settlement.service.SettlementService;
+import org.example.burtyserver.domain.user.model.entity.User;
 import org.example.burtyserver.global.security.CurrentUser;
 import org.example.burtyserver.global.security.UserPrincipal;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 정착지 추천 관련 API 컨트롤러
@@ -52,4 +51,34 @@ public class SettlementController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping
+    @Operation(
+            summary = "사용자의 정착 리포트 목록 조회",
+            description = "현재 로그인한 사용자의 모든 정착 리포트 목록을 조회합니다.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "정착 리포트 목록 조회 성공")
+    public ResponseEntity<List<SettlementRecommendationResponse>> getUserReports(
+            @CurrentUser UserPrincipal userPrincipal
+            ){
+        List<SettlementRecommendationResponse> reports = settlementService.getUserReports(userPrincipal.getId());
+        return ResponseEntity.ok(reports);
+    }
+
+    @GetMapping("/{reportId}")
+    @Operation(
+            summary = "특정 정착 리포트 상세 조회",
+            description = "특정 ID의 정착 리포트 상세 정보를 조회합니다.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponse(responseCode = "200", description = "정착 리포트 상세 조회 성공")
+    public ResponseEntity<SettlementRecommendationResponse> getReportById(
+            @CurrentUser UserPrincipal userPrincipal,
+            @PathVariable Long reportId
+    ) {
+        SettlementRecommendationResponse report = settlementService.getReportById(userPrincipal.getId(), reportId);
+        return ResponseEntity.ok(report);
+    }
+
 }

@@ -25,7 +25,8 @@ public class KeywordExtractionService {
         String fullText = (title + " " + content).toLowerCase();
 
         for (Keyword keyword : allKeywords) {
-            if (fullText.contains(keyword.getWord().toLowerCase())) {
+            String keywordText = keyword.getWord().toLowerCase();
+            if (fullText.matches(".*\\b" + keywordText + ".*") || fullText.contains(keywordText)) {
                 if (keyword.getMappedCategory() != null) {
                     categories.add(keyword.getMappedCategory());
                 }

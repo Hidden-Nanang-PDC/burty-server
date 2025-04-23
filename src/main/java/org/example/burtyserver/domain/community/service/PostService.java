@@ -30,6 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final BoardCategoryRepository boardCategoryRepository;
     private final UserRepository userRepository;
+    private final KeywordExtractionService keywordExtractionService;
 
     /**
      * 게시글 생성
@@ -39,13 +40,10 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
-        Set<BoardCategory> categories = null;
-        if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
-            categories = request.getCategoryIds().stream()
-                    .map(categoryId -> boardCategoryRepository.findById(categoryId)
-                            .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID : "+ categoryId)))
-                    .collect(Collectors.toSet());
-        }
+        Set<BoardCategory> categories = keywordExtractionService.extractCategoriesFromContent(
+                request.getTitle(),
+                request.getContent()
+        );
 
         Post post = Post.builder()
                 .title(request.getTitle())
@@ -71,13 +69,10 @@ public class PostService {
             throw new AccessDeniedException("게시글을 수정할 권한이 없습니다.");
         }
 
-        Set<BoardCategory> categories = new HashSet<>();
-        if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()){
-            categories = request.getCategoryIds().stream()
-                    .map(categoryId -> boardCategoryRepository.findById(categoryId)
-                            .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID : "+categoryId)))
-                    .collect(Collectors.toSet());
-        }
+        Set<BoardCategory> categories = keywordExtractionService.extractCategoriesFromContent(
+                request.getTitle(),
+                request.getContent()
+        );
         post.setCategories(categories);
         return postRepository.save(post);
     }

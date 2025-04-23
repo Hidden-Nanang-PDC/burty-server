@@ -26,5 +26,5 @@ public class Keyword {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mapped_category_id")
-    private KeywordType mappedCategory; //키워드가 발견되면 매핑할 실게 게시판 카테고리
+    private BoardCategory mappedCategory; //키워드가 발견되면 매핑할 실게 게시판 카테고리
 }

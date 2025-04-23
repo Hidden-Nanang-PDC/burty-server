@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.burtyserver.domain.community.model.entity.Category;
+import org.example.burtyserver.domain.community.model.entity.BoardCategory;
 
 /**
  * 카테고리 관련 DTO 클래스 모음
  */
-public class CategoryDto {
+public class BoardCategoryDto {
     /**
      * 카테고리 생성, 수정 요청 DTO
      */
@@ -33,11 +33,11 @@ public class CategoryDto {
         private String name;
         private int postCount;
 
-        public static Response from(Category category) {
+        public static Response from(BoardCategory boardCategory) {
             return Response.builder()
-                    .id(category.getId())
-                    .name(category.getName())
-                    .postCount(category.getPosts().size())
+                    .id(boardCategory.getId())
+                    .name(boardCategory.getName())
+                    .postCount(boardCategory.getPosts().size())
                     .build();
         }
     }

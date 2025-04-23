@@ -40,6 +40,8 @@ public class CommentDto {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private boolean isAuthor;
+        private int likeCount;
+        private boolean liked;
 
         public static Response from(Comment comment, User currentUser) {
             return Response.builder()
@@ -51,6 +53,8 @@ public class CommentDto {
                     .createdAt(comment.getCreatedAt())
                     .updatedAt(comment.getUpdatedAt())
                     .isAuthor(currentUser != null && comment.getAuthor().getId().equals(currentUser.getId()))
+                    .likeCount(comment.getLikeCount())
+                    .liked(currentUser != null && comment.isLikedByUser(currentUser))
                     .build();
         }
     }

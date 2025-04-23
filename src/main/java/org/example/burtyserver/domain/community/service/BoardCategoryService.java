@@ -3,9 +3,9 @@ package org.example.burtyserver.domain.community.service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.example.burtyserver.domain.community.model.dto.CategoryDto;
-import org.example.burtyserver.domain.community.model.entity.Category;
-import org.example.burtyserver.domain.community.model.repository.CategoryRepository;
+import org.example.burtyserver.domain.community.model.dto.BoardCategoryDto;
+import org.example.burtyserver.domain.community.model.entity.BoardCategory;
+import org.example.burtyserver.domain.community.model.repository.BoardCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,42 +16,42 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
-    private final CategoryRepository categoryRepository;
+public class BoardCategoryService {
+    private final BoardCategoryRepository boardCategoryRepository;
 
     /**
      * 카테고리 생성
      */
     @Transactional
-    public Category createCategory(CategoryDto.Request request) {
+    public BoardCategory createCategory(BoardCategoryDto.Request request) {
         // 카테고리명 중복 확인
-        if (categoryRepository.existsByName(request.getName())) {
+        if (boardCategoryRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다: " + request.getName());
         }
 
-        Category category = Category.builder()
+        BoardCategory boardCategory = BoardCategory.builder()
                 .name(request.getName())
                 .build();
 
-        return categoryRepository.save(category);
+        return boardCategoryRepository.save(boardCategory);
     }
 
     /**
      * 카테고리 업데이트
      */
     @Transactional
-    public Category updateCategory(Long categoryId, CategoryDto.Request request) {
-        Category category = categoryRepository.findById(categoryId)
+    public BoardCategory updateCategory(Long categoryId, BoardCategoryDto.Request request) {
+        BoardCategory boardCategory = boardCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID: " + categoryId));
 
         // 카테고리명 중복 확인 (다른 카테고리와 중복되는지)
-        if (!category.getName().equals(request.getName()) &&
-                categoryRepository.existsByName(request.getName())) {
+        if (!boardCategory.getName().equals(request.getName()) &&
+                boardCategoryRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("이미 존재하는 카테고리 이름입니다: " + request.getName());
         }
 
-        category.update(request.getName());
-        return categoryRepository.save(category);
+        boardCategory.update(request.getName());
+        return boardCategoryRepository.save(boardCategory);
     }
 
     /**
@@ -59,34 +59,34 @@ public class CategoryService {
      */
     @Transactional
     public void deleteCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
+        BoardCategory boardCategory = boardCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID: " + categoryId));
 
         // 게시글이 있는 카테고리는 삭제할 수 없음
-        if (!category.getPosts().isEmpty()) {
+        if (!boardCategory.getPosts().isEmpty()) {
             throw new IllegalStateException("게시글이 있는 카테고리는 삭제할 수 없습니다.");
         }
 
-        categoryRepository.delete(category);
+        boardCategoryRepository.delete(boardCategory);
     }
 
     /**
      * 카테고리 목록 조회
      */
-    public List<CategoryDto.Response> getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
+    public List<BoardCategoryDto.Response> getAllCategories() {
+        List<BoardCategory> categories = boardCategoryRepository.findAll();
         return categories.stream()
-                .map(CategoryDto.Response::from)
+                .map(BoardCategoryDto.Response::from)
                 .collect(Collectors.toList());
     }
 
     /**
      * 카테고리 상세 조회
      */
-    public CategoryDto.Response getCategoryById(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId)
+    public BoardCategoryDto.Response getCategoryById(Long categoryId) {
+        BoardCategory boardCategory = boardCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID: " + categoryId));
 
-        return CategoryDto.Response.from(category);
+        return BoardCategoryDto.Response.from(boardCategory);
     }
 }

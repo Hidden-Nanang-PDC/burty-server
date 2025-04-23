@@ -7,31 +7,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-/**
- * 게시판 카테고리 엔티티
- */
 @Entity
-@Table(name = "community_categories")
+@Table(name = "community_keyword_categories")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Category {
+public class KeywordType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String name; // 지역, 연령대, 직무
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Post> posts = new HashSet<>();
-
-    public void update(String name){
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Keyword> keywords = new ArrayList<>();
 }

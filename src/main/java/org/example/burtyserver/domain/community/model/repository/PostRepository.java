@@ -1,6 +1,5 @@
 package org.example.burtyserver.domain.community.model.repository;
 
-import org.example.burtyserver.domain.community.model.entity.Category;
 import org.example.burtyserver.domain.community.model.entity.Post;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.springframework.data.domain.Page;

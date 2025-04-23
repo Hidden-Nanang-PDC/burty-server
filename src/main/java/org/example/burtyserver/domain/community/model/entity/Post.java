@@ -2,7 +2,6 @@ package org.example.burtyserver.domain.community.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.checkerframework.checker.units.qual.C;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,7 +44,7 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    private Set<Category> categories = new HashSet<>();
+    private Set<BoardCategory> categories = new HashSet<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -60,7 +59,7 @@ public class Post {
     private Set<PostLike> likes = new HashSet<>();
 
 
-    public void update(String title, String content, Set<Category> categories){
+    public void update(String title, String content, Set<BoardCategory> categories){
         this.title = title;
         this.content = content;
         this.categories = categories;
@@ -71,12 +70,12 @@ public class Post {
         comment.setPost(this);
     }
 
-    public void addCategory(Category category) {
-        this.categories.add(category);
+    public void addCategory(BoardCategory boardCategory) {
+        this.categories.add(boardCategory);
     }
 
-    public void removeCategory(Category category){
-        this.categories.remove(category);
+    public void removeCategory(BoardCategory boardCategory){
+        this.categories.remove(boardCategory);
     }
 
     public int getLikeCount() {

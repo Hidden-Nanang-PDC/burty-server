@@ -4,9 +4,9 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.community.model.dto.PostDto;
-import org.example.burtyserver.domain.community.model.entity.Category;
+import org.example.burtyserver.domain.community.model.entity.BoardCategory;
 import org.example.burtyserver.domain.community.model.entity.Post;
-import org.example.burtyserver.domain.community.model.repository.CategoryRepository;
+import org.example.burtyserver.domain.community.model.repository.BoardCategoryRepository;
 import org.example.burtyserver.domain.community.model.repository.PostRepository;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.example.burtyserver.domain.user.model.repository.UserRepository;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final CategoryRepository categoryRepository;
+    private final BoardCategoryRepository boardCategoryRepository;
     private final UserRepository userRepository;
 
     /**
@@ -39,10 +39,10 @@ public class PostService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
-        Set<Category> categories = null;
+        Set<BoardCategory> categories = null;
         if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()) {
             categories = request.getCategoryIds().stream()
-                    .map(categoryId -> categoryRepository.findById(categoryId)
+                    .map(categoryId -> boardCategoryRepository.findById(categoryId)
                             .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID : "+ categoryId)))
                     .collect(Collectors.toSet());
         }
@@ -71,10 +71,10 @@ public class PostService {
             throw new AccessDeniedException("게시글을 수정할 권한이 없습니다.");
         }
 
-        Set<Category> categories = new HashSet<>();
+        Set<BoardCategory> categories = new HashSet<>();
         if (request.getCategoryIds() != null && !request.getCategoryIds().isEmpty()){
             categories = request.getCategoryIds().stream()
-                    .map(categoryId -> categoryRepository.findById(categoryId)
+                    .map(categoryId -> boardCategoryRepository.findById(categoryId)
                             .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID : "+categoryId)))
                     .collect(Collectors.toSet());
         }
@@ -130,12 +130,12 @@ public class PostService {
      * 카테고리별 게시글 목록 조회
      */
     public Page<PostDto.ListResponse> getPostsByCategory(Long categoryId, Long currentUserId, Pageable pageable) {
-        Category category = categoryRepository.findById(categoryId)
+        BoardCategory boardCategory = boardCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID: " + categoryId));
 
         User currentUser;
         currentUser = userRepository.findById(currentUserId).orElse(null);
-        Page<Post> posts = postRepository.findByCategoryIdOrderByCreatedAtDesc(category.getId(), pageable);
+        Page<Post> posts = postRepository.findByCategoryIdOrderByCreatedAtDesc(boardCategory.getId(), pageable);
         return posts.map(post -> PostDto.ListResponse.from(post, currentUser));
     }
 

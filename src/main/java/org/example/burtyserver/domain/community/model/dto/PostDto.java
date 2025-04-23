@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
-import org.example.burtyserver.domain.community.model.entity.Category;
+import org.example.burtyserver.domain.community.model.entity.BoardCategory;
 import org.example.burtyserver.domain.community.model.entity.Post;
 import org.example.burtyserver.domain.user.model.entity.User;
 
@@ -54,7 +53,7 @@ public class PostDto {
          */
         public static ListResponse from(Post post, User currentUser) {
             List<String> categoryNames = post.getCategories().stream()
-                    .map(Category::getName)
+                    .map(BoardCategory::getName)
                     .toList();
 
             return ListResponse.builder()
@@ -85,7 +84,7 @@ public class PostDto {
         private Long authorId;
         private String authorName;
         private String authorImageUrl;
-        private List<CategoryDto.Response> categories;
+        private List<BoardCategoryDto.Response> categories;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private List<CommentDto.Response> comments;
@@ -97,8 +96,8 @@ public class PostDto {
             List<CommentDto.Response> commentDtos = post.getComments().stream()
                     .map(comment -> CommentDto.Response.from(comment, currentUser))
                     .collect(Collectors.toList());
-            List<CategoryDto.Response> categoryDtos = post.getCategories().stream()
-                    .map(CategoryDto.Response::from)
+            List<BoardCategoryDto.Response> categoryDtos = post.getCategories().stream()
+                    .map(BoardCategoryDto.Response::from)
                     .collect(Collectors.toList());
 
             return DetailResponse.builder()

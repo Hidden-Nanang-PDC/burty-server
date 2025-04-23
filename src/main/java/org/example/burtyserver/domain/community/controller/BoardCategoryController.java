@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.example.burtyserver.domain.community.model.dto.CategoryDto;
-import org.example.burtyserver.domain.community.model.entity.Category;
-import org.example.burtyserver.domain.community.service.CategoryService;
+import org.example.burtyserver.domain.community.model.dto.BoardCategoryDto;
+import org.example.burtyserver.domain.community.model.entity.BoardCategory;
+import org.example.burtyserver.domain.community.service.BoardCategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 게시판 카테고리 관련 API 컨트롤러
@@ -23,8 +22,8 @@ import java.util.Objects;
 @RequestMapping("/api/community/categories")
 @RequiredArgsConstructor
 @Tag(name = "커뮤니티 카테고리", description = "게시판 카테고리 관련 API")
-public class CategoryController {
-    private final CategoryService categoryService;
+public class BoardCategoryController {
+    private final BoardCategoryService boardCategoryService;
 
     /**
      * 카테고리 생성 API
@@ -35,13 +34,13 @@ public class CategoryController {
             description = "새로운 게시판 카테고리를 생성합니다.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<?> createCategory(@RequestBody CategoryDto.Request request) {
-        Category category = categoryService.createCategory(request);
+    public ResponseEntity<?> createCategory(@RequestBody BoardCategoryDto.Request request) {
+        BoardCategory boardCategory = boardCategoryService.createCategory(request);
 
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("message", "카테고리가 성공적으로 생성되었습니다.");
-        response.put("categoryId", category.getId());
+        response.put("categoryId", boardCategory.getId());
 
         return ResponseEntity.ok(response);
     }
@@ -57,14 +56,14 @@ public class CategoryController {
     )
     public ResponseEntity<?> updateCategory(
             @PathVariable Long categoryId,
-            @RequestBody CategoryDto.Request request
+            @RequestBody BoardCategoryDto.Request request
     ) {
-        Category category = categoryService.updateCategory(categoryId, request);
+        BoardCategory boardCategory = boardCategoryService.updateCategory(categoryId, request);
 
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
         response.put("message", "카테고리가 성공적으로 수정되었습니다.");
-        response.put("categoryId", category.getId());
+        response.put("categoryId", boardCategory.getId());
 
         return ResponseEntity.ok(response);
     }
@@ -80,7 +79,7 @@ public class CategoryController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> deleteCategory(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
+        boardCategoryService.deleteCategory(categoryId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("success", true);
@@ -98,8 +97,8 @@ public class CategoryController {
             description = "모든 카테고리 목록을 조회합니다",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<List<CategoryDto.Response>> getAllCategories() {
-        List<CategoryDto.Response> categories = categoryService.getAllCategories();
+    public ResponseEntity<List<BoardCategoryDto.Response>> getAllCategories() {
+        List<BoardCategoryDto.Response> categories = boardCategoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
 
@@ -112,8 +111,8 @@ public class CategoryController {
             description = "특정 카테고리의 상세 정보를 조회합니다",
             security = @SecurityRequirement(name = "bearerAuth")
     )
-    public ResponseEntity<CategoryDto.Response> getCategoryById(@PathVariable Long categoryId) {
-        CategoryDto.Response category = categoryService.getCategoryById(categoryId);
+    public ResponseEntity<BoardCategoryDto.Response> getCategoryById(@PathVariable Long categoryId) {
+        BoardCategoryDto.Response category = boardCategoryService.getCategoryById(categoryId);
         return ResponseEntity.ok(category);
     }
 

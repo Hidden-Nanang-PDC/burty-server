@@ -4,13 +4,16 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.example.burtyserver.domain.community.model.dto.PostDto;
 import org.example.burtyserver.domain.community.model.entity.Post;
 import org.example.burtyserver.domain.community.model.entity.PostLike;
 import org.example.burtyserver.domain.community.model.repository.PostLikeRepository;
 import org.example.burtyserver.domain.community.model.repository.PostRepository;
 import org.example.burtyserver.domain.user.model.entity.User;
 import org.example.burtyserver.domain.user.model.repository.UserRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 게시글 좋아요 관련 비즈니스 로직을 담당하는 서비스
@@ -83,5 +86,17 @@ public class PostLikeService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + postId));
 
         return postLikeRepository.countByPost(post);
+    }
+
+     /**
+     * 사용자가 좋아요한 게시글 목록 페이징 조회
+     */
+    public Page<PostDto.ListResponse> getLikedPostsByUser(Long userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID: " + userId));
+
+        Page<Post> likePosts = postLikeRepository.findPostLikedByUser(userId, pageable);
+
+        return likePosts.map(post -> PostDto.ListResponse.from(post, user));
     }
 }

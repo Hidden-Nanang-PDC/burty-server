@@ -4,13 +4,19 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.burtyserver.domain.community.model.dto.PostDto;
 import org.example.burtyserver.domain.community.service.PostLikeService;
 import org.example.burtyserver.global.security.CurrentUser;
 import org.example.burtyserver.global.security.UserPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -82,5 +88,22 @@ public class PostLikeController {
         response.put("likeCount", likeCount);
 
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 내가 좋아요한 게시글 목록 조회 API
+     */
+    @GetMapping("/liked-by-me")
+    @Operation(
+            summary = "내가 좋아요한 게시글 목록 페이징 조회",
+            description = "현재 로그인한 사용자가 좋아요한 게시글 목록을 페이징하여 조회합니다.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    public ResponseEntity<Page<PostDto.ListResponse>> getMyLikedPosts (
+            @CurrentUser UserPrincipal userPrincipal,
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ){
+        Page<PostDto.ListResponse> posts = postLikeService.getLikedPostsByUser(userPrincipal.getId(), pageable);
+        return ResponseEntity.ok(posts);
     }
 }

@@ -4,8 +4,13 @@ package org.example.burtyserver.domain.community.model.repository;
 import org.example.burtyserver.domain.community.model.entity.Post;
 import org.example.burtyserver.domain.community.model.entity.PostLike;
 import org.example.burtyserver.domain.user.model.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
@@ -26,7 +31,8 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     long countByPost(Post post);
 
     /**
-     * 특정 사용자가 좋아요한 게시글 수 조회
+     * 특정 사용자가 좋아요한 게시글 목록 조회
      */
-    long countByUser(User user);
+    @Query("SELECT pl.post FROM PostLike pl WHERE pl.user.id = :userId ORDER BY pl.createdAt DESC")
+    Page<Post> findPostLikedByUser(@Param("userId") Long userId, Pageable pageable);
 }

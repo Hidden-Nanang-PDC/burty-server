@@ -124,9 +124,10 @@ public class PostController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<Page<PostDto.ListResponse>> getPosts(
+            @CurrentUser UserPrincipal userPrincipal,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        Page<PostDto.ListResponse> posts = postService.getPosts(pageable);
+        Page<PostDto.ListResponse> posts = postService.getPosts(pageable, userPrincipal.getId());
         return ResponseEntity.ok(posts);
     }
 
@@ -141,9 +142,10 @@ public class PostController {
     )
     public ResponseEntity<Page<PostDto.ListResponse>> getPostsByCategory(
             @PathVariable Long categoryId,
+            @CurrentUser UserPrincipal userPrincipal,
             @PageableDefault(size = 10, sort = "createdAt") Pageable pageable
     ) {
-        Page<PostDto.ListResponse> posts = postService.getPostsByCategory(categoryId, pageable);
+        Page<PostDto.ListResponse> posts = postService.getPostsByCategory(categoryId, userPrincipal.getId(), pageable);
         return ResponseEntity.ok(posts);
     }
 
@@ -159,7 +161,7 @@ public class PostController {
     public ResponseEntity<List<PostDto.ListResponse>> getMyPosts(
             @CurrentUser UserPrincipal userPrincipal
     ) {
-        List<PostDto.ListResponse> posts = postService.getPostsByUser(userPrincipal.getId());
+        List<PostDto.ListResponse> posts = postService.getPostsByUser(userPrincipal.getId(), userPrincipal.getId());
         return ResponseEntity.ok(posts);
     }
 

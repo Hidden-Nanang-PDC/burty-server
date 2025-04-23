@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.community.model.dto.CommentDto;
+import org.example.burtyserver.domain.community.model.dto.PostDto;
 import org.example.burtyserver.domain.community.model.entity.Comment;
 import org.example.burtyserver.domain.community.model.entity.Post;
 import org.example.burtyserver.domain.community.model.repository.CommentRepository;
@@ -88,8 +89,10 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + postId));
 
         List<Comment> comments = commentRepository.findByPostOrderByCreatedAtAsc(post);
+        User currentUser;
+        currentUser = userRepository.findById(userId).orElse(null);
         return comments.stream()
-                .map(comment -> CommentDto.Response.from(comment, userId))
+                .map(comment -> CommentDto.Response.from(comment, currentUser))
                 .collect(Collectors.toList());
     }
 
@@ -101,8 +104,25 @@ public class CommentService {
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID: " + userId));
 
         List<Comment> comments = commentRepository.findByAuthorOrderByCreatedAtDesc(user);
+        User currentUser;
+        currentUser = userRepository.findById(userId).orElse(null);
         return comments.stream()
-                .map(comment -> CommentDto.Response.from(comment, userId))
+                .map(comment -> CommentDto.Response.from(comment, currentUser))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 사용자가 댓글을 작성한 게시글 목록 조회
+     */
+    public List<PostDto.ListResponse> getPostsCommentedByUser (Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다. ID : "+userId));
+
+        List<Post> posts = commentRepository.findPostsByCommentAuthor(userId);
+
+        return posts.stream()
+                .distinct()
+                .map(post -> PostDto.ListResponse.from(post, user))
                 .collect(Collectors.toList());
     }
 

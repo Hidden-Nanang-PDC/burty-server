@@ -34,7 +34,7 @@ public class PostController {
     @PostMapping
     @Operation(
             summary = "게시글 작성",
-            description = "새로운 게시글을 작성합니다.",
+            description = "새로운 게시글을 작성합니다. categoryIds는 삭제하고 요청 가능",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> createPost(
@@ -81,7 +81,7 @@ public class PostController {
     @DeleteMapping("/{postId}")
     @Operation(
             summary = "게시글 삭제",
-            description = "게시글을 삭제합니다",
+            description = "게시글을 삭제합니다. (현재 로그인한 사용자가 작성한 글만 삭제 가능)",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> deletePost(
@@ -120,12 +120,12 @@ public class PostController {
     @GetMapping
     @Operation(
             summary = "게시글 목록 조회",
-            description = "게시글 목록을 `createdAt DESC`로 정렬하여 페이징합니다. 클라이언트는 `sort`를 지정할 필요 없습니다. (sort를 지우고 요청하세요.)",
+            description = "게시글 목록을 조회합니다. sort 파라미터를 통해 정렬 방식을 지정할 수 있습니다(예: sort=createdAt,desc 또는 sort=viewCount,desc). sort 값이 하나일 경우 []를 삭제해주세요.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<Page<PostDto.ListResponse>> getPosts(
             @CurrentUser UserPrincipal userPrincipal,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+            @PageableDefault(size = 10) Pageable pageable
     ) {
         Page<PostDto.ListResponse> posts = postService.getPosts(pageable, userPrincipal.getId());
         return ResponseEntity.ok(posts);
@@ -137,13 +137,14 @@ public class PostController {
     @GetMapping("/category/{categoryId}")
     @Operation(
             summary = "카테고리별 게시글 목록 조회",
-            description = "특정 카테고리의 게시글 목록을 조회합니다",
+            description = "특정 카테고리의 게시글 목록을 조회합니다. sort 파라미터를 통해 정렬 방식을 지정할 수 있습니다(예: sort=createdAt,desc 또는 sort=viewCount,desc). " +
+                    "\nsort 값이 하나일 경우 []를 삭제해주세요.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<Page<PostDto.ListResponse>> getPostsByCategory(
             @PathVariable Long categoryId,
             @CurrentUser UserPrincipal userPrincipal,
-            @PageableDefault(size = 10, sort = "createdAt") Pageable pageable
+            @PageableDefault(size = 10) Pageable pageable
     ) {
         Page<PostDto.ListResponse> posts = postService.getPostsByCategory(categoryId, userPrincipal.getId(), pageable);
         return ResponseEntity.ok(posts);

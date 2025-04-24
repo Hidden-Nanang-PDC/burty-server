@@ -27,11 +27,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 200)
-    private String title;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "bigint default 0")
+    private Long viewCount = 0L;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
@@ -59,8 +60,7 @@ public class Post {
     private Set<PostLike> likes = new HashSet<>();
 
 
-    public void update(String title, String content, Set<BoardCategory> categories){
-        this.title = title;
+    public void update(String content, Set<BoardCategory> categories){
         this.content = content;
         this.categories = categories;
     }
@@ -98,5 +98,9 @@ public class Post {
 
     public void removeLike(User user) {
         this.likes.removeIf(like -> like.getUser().getId().equals(user.getId()));
+    }
+
+    public void incrementViewCount() {
+        this.viewCount = (this.viewCount == null) ? 1L : this.viewCount + 1L;
     }
 }

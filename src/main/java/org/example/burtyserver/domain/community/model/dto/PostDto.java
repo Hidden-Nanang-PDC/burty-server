@@ -38,6 +38,7 @@ public class PostDto {
     @Builder
     public static class ListResponse {
         private Long id;
+        private String content;
         private Long authorId;
         private String authorName;
         private List<String> categoryNames;
@@ -56,6 +57,7 @@ public class PostDto {
 
             return ListResponse.builder()
                     .id(post.getId())
+                    .content(post.getContent())
                     .authorId(post.getAuthor().getId())
                     .authorName(post.getAuthor().getName())
                     .categoryNames(categoryNames)

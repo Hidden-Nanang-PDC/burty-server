@@ -41,12 +41,10 @@ public class PostService {
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         Set<BoardCategory> categories = keywordExtractionService.extractCategoriesFromContent(
-                request.getTitle(),
                 request.getContent()
         );
 
         Post post = Post.builder()
-                .title(request.getTitle())
                 .content(request.getContent())
                 .author(user)
                 .build();
@@ -70,7 +68,6 @@ public class PostService {
         }
 
         Set<BoardCategory> categories = keywordExtractionService.extractCategoriesFromContent(
-                request.getTitle(),
                 request.getContent()
         );
         post.setCategories(categories);

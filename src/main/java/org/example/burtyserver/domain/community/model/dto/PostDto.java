@@ -25,7 +25,6 @@ public class PostDto {
     @AllArgsConstructor
     @Builder
     public static class PostRequest {
-        private String title;
         private String content;
         private Set<Long> categoryIds;
     }
@@ -39,7 +38,6 @@ public class PostDto {
     @Builder
     public static class ListResponse {
         private Long id;
-        private String title;
         private Long authorId;
         private String authorName;
         private List<String> categoryNames;
@@ -58,7 +56,6 @@ public class PostDto {
 
             return ListResponse.builder()
                     .id(post.getId())
-                    .title(post.getTitle())
                     .authorId(post.getAuthor().getId())
                     .authorName(post.getAuthor().getName())
                     .categoryNames(categoryNames)
@@ -79,7 +76,6 @@ public class PostDto {
     @Builder
     public static class DetailResponse{
         private Long id;
-        private String title;
         private String content;
         private Long authorId;
         private String authorName;
@@ -102,7 +98,6 @@ public class PostDto {
 
             return DetailResponse.builder()
                     .id(post.getId())
-                    .title(post.getTitle())
                     .content(post.getContent())
                     .authorId(post.getAuthor().getId())
                     .authorName(post.getAuthor().getName())

@@ -27,9 +27,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 200)
-    private String title;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
@@ -59,8 +56,7 @@ public class Post {
     private Set<PostLike> likes = new HashSet<>();
 
 
-    public void update(String title, String content, Set<BoardCategory> categories){
-        this.title = title;
+    public void update(String content, Set<BoardCategory> categories){
         this.content = content;
         this.categories = categories;
     }

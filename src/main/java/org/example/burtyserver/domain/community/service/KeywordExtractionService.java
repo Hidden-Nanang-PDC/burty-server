@@ -18,11 +18,11 @@ public class KeywordExtractionService {
     /**
      * 게시글 내용에서 등록된 키워드를 추출하려 매핑된 카테고리 목록 반환
      */
-    public Set<BoardCategory> extractCategoriesFromContent(String title, String content) {
+    public Set<BoardCategory> extractCategoriesFromContent(String content) {
         Set<BoardCategory> categories = new HashSet<>();
 
         List<Keyword> allKeywords = keywordRepository.findAll();
-        String fullText = (title + " " + content).toLowerCase();
+        String fullText = content.toLowerCase();
 
         for (Keyword keyword : allKeywords) {
             String keywordText = keyword.getWord().toLowerCase();

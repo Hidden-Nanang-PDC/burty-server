@@ -46,6 +46,7 @@ public class PostDto {
         private LocalDateTime createdAt;
         private int likeCount;
         private boolean liked; // 현재 사용자가 좋아요를 눌렀는지 여부
+        private Long viewCount;
 
         /**
          * 게시글 목록 응답 DTO
@@ -65,6 +66,7 @@ public class PostDto {
                     .createdAt(post.getCreatedAt())
                     .likeCount(post.getLikeCount())
                     .liked(currentUser != null && post.isLikedByUser(currentUser))
+                    .viewCount(post.getViewCount())
                     .build();
         }
     }
@@ -89,6 +91,7 @@ public class PostDto {
         private boolean isAuthor;
         private int likeCount;
         private boolean liked;
+        private Long viewCount;
 
         public static DetailResponse from(Post post, User currentUser) {
             List<CommentDto.Response> commentDtos = post.getComments().stream()
@@ -111,6 +114,7 @@ public class PostDto {
                     .isAuthor(currentUser != null && post.getAuthor().getId().equals(currentUser.getId()))
                     .likeCount(post.getLikeCount())
                     .liked(currentUser != null && post.isLikedByUser(currentUser))
+                    .viewCount(post.getViewCount())
                     .build();
         }
     }

@@ -33,5 +33,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT DISTINCT p FROM Post p JOIN p.categories c WHERE c.id = :categoryId ORDER BY p.createdAt DESC")
     Page<Post> findByCategoryIdOrderByCreatedAtDesc(@Param("categoryId") Long categoryId, Pageable pageable);
 
+    /**
+     * 조회수 순으로 정렬된 게시글 목록 조회 (내림차순)
+     */
+    Page<Post> findAllByOrderByViewCountDesc(Pageable pageable);
 
+    /**
+     * 특정 카테고리의 게시글을 조회수 순으로 정렬
+     */
+    @Query("SELECT DISTINCT p FROM Post p JOIN p.categories c WHERE c.id = :categoryId ORDER BY p.viewCount DESC")
+    Page<Post> findByCategoryIdOrderByViewCountDesc(@Param("categoryId") Long categoryId, Pageable pageable);
+
+    @Query("SELECT DISTINCT p FROM Post p JOIN p.categories c WHERE c.id = :categoryId")
+    Page<Post> findByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 }

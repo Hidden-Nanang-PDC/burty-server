@@ -101,6 +101,7 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다. ID: " + postId));
 
+        post.incrementViewCount();
         postRepository.save(post);
         User currentUser;
         currentUser = userRepository.findById(userId).orElse(null);
@@ -112,9 +113,15 @@ public class PostService {
      * 게시글 목록 조회
      */
     public Page<PostDto.ListResponse> getPosts(Pageable pageable, Long userId) {
-        Page<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<Post> posts = postRepository.findAll(pageable);
+
         User currentUser;
-        currentUser = userRepository.findById(userId).orElse(null);
+        if (userId != null) {
+            currentUser = userRepository.findById(userId).orElse(null);
+        } else {
+            currentUser = null;
+        }
+
         return posts.map(post -> PostDto.ListResponse.from(post, currentUser));
     }
 
@@ -125,9 +132,16 @@ public class PostService {
         BoardCategory boardCategory = boardCategoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("카테고리를 찾을 수 없습니다. ID: " + categoryId));
 
+        // pageable에 이미 정렬 정보가 포함되어 있으므로, 커스텀 정렬 로직 필요 없음
+        Page<Post> posts = postRepository.findByCategoryId(categoryId, pageable);
+
         User currentUser;
-        currentUser = userRepository.findById(currentUserId).orElse(null);
-        Page<Post> posts = postRepository.findByCategoryIdOrderByCreatedAtDesc(boardCategory.getId(), pageable);
+        if (currentUserId != null) {
+            currentUser = userRepository.findById(currentUserId).orElse(null);
+        } else {
+            currentUser = null;
+        }
+
         return posts.map(post -> PostDto.ListResponse.from(post, currentUser));
     }
 
@@ -155,4 +169,5 @@ public class PostService {
                 .map(post -> PostDto.ListResponse.from(post, currentUser))
                 .collect(Collectors.toList());
     }
+
 }

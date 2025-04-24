@@ -30,6 +30,9 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(nullable = false, columnDefinition = "bigint default 0")
+    private Long viewCount = 0L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
@@ -94,5 +97,9 @@ public class Post {
 
     public void removeLike(User user) {
         this.likes.removeIf(like -> like.getUser().getId().equals(user.getId()));
+    }
+
+    public void incrementViewCount() {
+        this.viewCount = (this.viewCount == null) ? 1L : this.viewCount + 1L;
     }
 }

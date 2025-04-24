@@ -30,6 +30,7 @@ public class Post {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Builder.Default
     @Column(nullable = false, columnDefinition = "bigint default 0")
     private Long viewCount = 0L;
 

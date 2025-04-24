@@ -1,12 +1,15 @@
 package org.example.burtyserver.domain.auth.service;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.burtyserver.domain.user.model.repository.UserRepository;
 import org.example.burtyserver.global.security.UserPrincipal;
 import org.example.burtyserver.global.security.jwt.TokenProvider;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,6 +36,26 @@ public class AuthService {
         if (refreshToken != null) {
             tokenProvider.revokeRefreshToken(refreshToken);
             deleteRefreshTokenCookie(response);
+        }
+
+        //인증 정보 제거
+        SecurityContextHolder.clearContext();
+
+        // 세션 무효화
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // 쿠키 삭제
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                cookie.setValue("");
+                cookie.setPath("/");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
         }
     }
 

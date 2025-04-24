@@ -68,6 +68,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         if (userOptional.isPresent()) {
             user = userOptional.get();
+
+            // 추가: 탈퇴한 사용자(active=false) 확인 및 처리
+            if (!user.isActive()) {
+                log.warn("탈퇴한 사용자가 로그인을 시도했습니다: {}", user.getId());
+                throw new OAuth2AuthenticationException("탈퇴한 계정입니다. 관리자에게 문의하세요.");
+            }
+
             // 사용자 정보 업데이트
             user = user.update(
                     oAuth2UserInfo.getName(),
@@ -95,6 +102,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 .nickname(null)
                 .region(null)
                 .birthDate(null)
+                .active(true)
                 .build();
 
         User savedUser = userRepository.save(user);

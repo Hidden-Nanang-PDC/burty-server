@@ -34,7 +34,7 @@ public class PostController {
     @PostMapping
     @Operation(
             summary = "게시글 작성",
-            description = "새로운 게시글을 작성합니다.",
+            description = "새로운 게시글을 작성합니다. categoryIds는 삭제하고 요청 가능",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> createPost(
@@ -81,7 +81,7 @@ public class PostController {
     @DeleteMapping("/{postId}")
     @Operation(
             summary = "게시글 삭제",
-            description = "게시글을 삭제합니다",
+            description = "게시글을 삭제합니다. (현재 로그인한 사용자가 작성한 글만 삭제 가능)",
             security = @SecurityRequirement(name = "bearerAuth")
     )
     public ResponseEntity<?> deletePost(

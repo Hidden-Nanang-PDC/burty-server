@@ -73,14 +73,16 @@ public class GeminiAPIService {
                         "다음 JSON 형식으로 답변해주세요:\n" +
                         "{\n" +
                         "  \"recommendedArea\": \"추천 지역명(시/군/구까지 구체적으로)\",\n" +
-                        "  \"recommendationReason\": \"추천 사유(직무 연관성, 생활비, 정책 등 구체적 이유)\",\n" +
-                        "  \"savingPotential\": \"해당 지역 예상 저축 가능성(직무별 평균 소득 - 고정비 - 지역 평균 월세)\",\n" +
+                        "  \"shortRecommendationReason\": \"추천 사유를 한 문장으로 간결하게 요약\",\n" +
+                        "  \"recommendationReason\": \"추천 사유(직무 연관성, 생활비, 정책 등 훨씬 더 구체적인 이유)\",\n" +
+                        "  \"savingPotential\": \"해당 지역 예상 저축 가능성(직무별 평균 소득 - 고정비 - 지역 평균 월세)형식으로.\",\n" +
+                        "  \"averageRent\": 추천 지역의 평균 월세(숫자만, 단위 없이),\n" +
                         "  \"policies\": [\n" +
                         "    {\"name\": \"정책명1\", \"description\": \"정책 설명1\", \"url\": \"정책 URL1(선택)\"},\n" +
                         "    {\"name\": \"정책명2\", \"description\": \"정책 설명2\", \"url\": \"정책 URL2(선택)\"}\n" +
                         "  ],\n" +
                         "}\n\n" +
-                        "데이터에 기반한 실질적인 도움이 되는 추천을 해주세요.",
+                        "데이터에 기반한 실질적인 도움이 되는 추천을 해주시고, shortRecommendationReason은 반드시 한 문장으로 간결하게 요약해주세요. averageRent는 평균 월세 금액을 숫자로만 제공해주세요(예: 450000).",
                 age, desiredJob, monthlyFixedCost
         );
     }

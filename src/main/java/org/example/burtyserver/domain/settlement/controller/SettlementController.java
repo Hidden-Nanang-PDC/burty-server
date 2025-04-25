@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.example.burtyserver.domain.settlement.model.dto.SettlementListResponse;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationRequest;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationResponse;
 import org.example.burtyserver.domain.settlement.service.SettlementService;
@@ -59,10 +60,10 @@ public class SettlementController {
             security = @SecurityRequirement(name = "bearerAuth")
     )
     @ApiResponse(responseCode = "200", description = "정착 리포트 목록 조회 성공")
-    public ResponseEntity<List<SettlementRecommendationResponse>> getUserReports(
+    public ResponseEntity<List<SettlementListResponse>> getUserReports(
             @CurrentUser UserPrincipal userPrincipal
             ){
-        List<SettlementRecommendationResponse> reports = settlementService.getUserReports(userPrincipal.getId());
+        List<SettlementListResponse> reports = settlementService.getUserReports(userPrincipal.getId());
         return ResponseEntity.ok(reports);
     }
 

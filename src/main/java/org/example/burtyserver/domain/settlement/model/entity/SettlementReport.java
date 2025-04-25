@@ -44,6 +44,11 @@ public class SettlementReport {
     @Column(length = 1000)
     private String savingPotential;
 
+    @Column(length = 255)
+    private String shortRecommendationReason; //한줄 추천 사유
+
+    private Integer averageRent;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

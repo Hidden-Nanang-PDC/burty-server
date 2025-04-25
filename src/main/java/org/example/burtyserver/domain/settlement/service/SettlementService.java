@@ -103,6 +103,16 @@ public class SettlementService {
 
         JsonNode jsonNode = objectMapper.readTree(textContent);
 
+        // 평균 월세 값 처리 (숫자가 아닌 경우 기본값 0 설정)
+        Integer averageRent = 0;
+        if (jsonNode.has("averageRent")) {
+            try {
+                averageRent = jsonNode.path("averageRent").asInt(0);
+            } catch (Exception e) {
+                log.warn("averageRent 필드를 숫자로 변환할 수 없습니다: {}", jsonNode.path("averageRent").asText());
+            }
+        }
+
         // 기본 정착 리포트 생정
         SettlementReport report = SettlementReport.builder()
                 .user(user)
@@ -111,6 +121,8 @@ public class SettlementService {
                 .monthlyFixedCost(request.getMonthlyFixedCost())
                 .recommendedArea(jsonNode.path("recommendedArea").asText())
                 .recommendationReason(jsonNode.path("recommendationReason").asText())
+                .shortRecommendationReason(jsonNode.path("shortRecommendationReason").asText(""))
+                .averageRent(averageRent)
                 .savingPotential(jsonNode.path("savingPotential").asText())
                 .policies(new ArrayList<>())
                 .build();

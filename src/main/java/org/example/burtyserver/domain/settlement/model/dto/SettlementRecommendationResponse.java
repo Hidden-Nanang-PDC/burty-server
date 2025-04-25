@@ -26,6 +26,9 @@ public class SettlementRecommendationResponse {
     private LocalDateTime createdAt;
     private List<PolicyDto> policies;
 
+    private String shortRecommendationReason;
+    private Integer averageRent;
+
     private Integer age;
     private String desiredJob;
     private Integer monthlyFixedCost;
@@ -51,6 +54,8 @@ public class SettlementRecommendationResponse {
                 .recommendationReason(report.getRecommendationReason())
                 .savingPotential(report.getSavingPotential())
                 .policies(policyDtos)
+                .shortRecommendationReason(report.getShortRecommendationReason())
+                .averageRent(report.getAverageRent())
                 .age(report.getAge())
                 .desiredJob(report.getDesiredJob())
                 .monthlyFixedCost(report.getMonthlyFixedCost())

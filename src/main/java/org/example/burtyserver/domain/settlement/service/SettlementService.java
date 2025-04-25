@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
+import org.example.burtyserver.domain.settlement.model.dto.SettlementListResponse;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationRequest;
 import org.example.burtyserver.domain.settlement.model.dto.SettlementRecommendationResponse;
 import org.example.burtyserver.domain.settlement.model.entity.SettlementPolicy;
@@ -137,15 +138,15 @@ public class SettlementService {
      * @param userId 사용자 ID
      * @return 정착 리포트 응답 DTO 목록
      */
-    public List<SettlementRecommendationResponse> getUserReports(Long userId) {
+    public List<SettlementListResponse> getUserReports(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. ID: " + userId));
 
         List<SettlementReport> reports = settlementReportRepository.findByUserOrderByCreatedAtDesc(user);
-        List<SettlementRecommendationResponse> responses = new ArrayList<>();
+        List<SettlementListResponse> responses = new ArrayList<>();
 
         for (SettlementReport report : reports) {
-            responses.add(SettlementRecommendationResponse.from(report));
+            responses.add(SettlementListResponse.from(report));
         }
         return responses;
     }
